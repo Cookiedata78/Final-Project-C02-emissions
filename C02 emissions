@@ -1,0 +1,87 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+from sklearn.linear_model import LinearRegression
+
+# Load data from Our World in Data
+url = 'https://ourworldindata.org/co2-and-greenhouse-gas-emissions'
+data = pd.read_csv(url)
+
+# Display basic information about the dataset
+print(data.info())
+
+def biggest_predictor(data):
+    # Use relevant columns for analysis
+    relevant_columns = ['gdp_per_capita', 'population', 'co2_per_capita', 'cars_per_capita', 'energy_production', 'diet_emissions']
+
+    # Create a new DataFrame with relevant columns
+    df = data[relevant_columns].copy()
+
+    # Fill missing values with the mean
+    df = df.fillna(df.mean())
+
+    # Use linear regression to find the biggest predictor
+    X = df.drop('co2_per_capita', axis=1)
+    y = df['co2_per_capita']
+    model = LinearRegression()
+    model.fit(X, y)
+
+    # Get the coefficients
+    coefficients = pd.Series(model.coef_, index=X.columns)
+
+    # Plot the coefficients
+    coefficients.sort_values().plot(kind='barh')
+    plt.title('Biggest Predictor of CO2 Output per Capita')
+    plt.xlabel('Coefficient Value')
+    plt.ylabel('Predictors')
+    plt.show()
+
+# Call the functio
+biggest_predictor(data)
+
+def biggest_strides(data):
+    # Calculate relative CO2 output
+    data['relative_co2_output'] = data['co2_per_capita'] / data['co2_per_capita'].mean()
+
+    # Group by country and find the average relative CO2 output
+    avg_relative_co2 = data.groupby('location')['relative_co2_output'].mean()
+
+    # Sort and plot the top 10 countries making the biggest strides
+    top_countries = avg_relative_co2.sort_values().head(10)
+    top_countries.plot(kind='bar')
+    plt.title('Top 10 Countries Making Biggest Strides in Decreasing CO2 Output')
+    plt.xlabel('Country')
+    plt.ylabel('Relative CO2 Output')
+    plt.show()
+
+# Call the function
+biggest_strides(data)
+
+def future_price_prediction(data):
+    # Use relevant columns for analysis
+    relevant_columns = ['solar_price', 'wind_price', 'hydro_price', 'bioenergy_price']
+
+    # Create a new DataFrame with relevant columns
+    df = data[relevant_columns].copy()
+
+    # Drop rows with missing values
+    df = df.dropna()
+
+    # Use linear regression to predict future prices
+    X = df.drop(['solar_price', 'wind_price'], axis=1)
+    for fuel in ['solar', 'wind']:
+        y = df[f'{fuel}_price']
+        model = LinearRegression()
+        model.fit(X, y)
+
+        # Plot the predicted prices
+        plt.scatter(df.index, y, label=f'Actual {fuel} Price')
+        plt.plot(df.index, model.predict(X), label=f'Predicted {fuel} Price', color='red')
+        plt.title(f'Future Price Prediction for {fuel} Energy')
+        plt.xlabel('Observations')
+        plt.ylabel('Price')
+        plt.legend()
+        plt.show()
+
+# Call the function
+future_price_prediction(data)
+
