@@ -3,9 +3,10 @@ import matplotlib.pyplot as plt
 from sklearn.linear_model import LinearRegression
 
 # Load data from Our World in Data
-url = 'https://ourworldindata.org/co2-and-greenhouse-gas-emissions'
-data = pd.read_csv(url)
-
+import csv
+# reading csv file
+df = pd.read_csv("co-emissions-per-capita.csv")
+print(df.head())
 # Display basic information about the dataset
 print(data.info())
 
