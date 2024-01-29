@@ -2,13 +2,16 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from sklearn.linear_model import LinearRegression
 
-# Load data from Our World in Data
-import csv
-# reading csv file
-df = pd.read_csv("co-emissions-per-capita.csv")
-print(df.head())
-# Display basic information about the dataset
-print(data.info())
+import pandas as pd
+
+# Specify the path to your CSV file
+csv_file_path = 'C:\CO2 emissions'
+
+# Read the CSV file into a pandas DataFrame
+df = pd.read_csv(csv_file_path)
+
+# Display the DataFrame or perform operations as needed
+print(df)
 
 def biggest_predictor(data):
     # Use relevant columns for analysis
