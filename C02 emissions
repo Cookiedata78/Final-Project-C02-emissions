@@ -2,7 +2,6 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from sklearn.linear_model import LinearRegression
 
-import pandas as pd
 
 # Specify the path to your CSV file
 csv_file_path = 'C:\CO2 emissions'
