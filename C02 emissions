@@ -1,30 +1,28 @@
+from sklearn.linear_model import LinearRegression
 import pandas as pd
 import matplotlib.pyplot as plt
-from sklearn.linear_model import LinearRegression
-
-
-# Specify the path to your CSV file
-csv_file_path = 'C:\CO2 emissions\owid-energy-data'
 
 # Read the CSV file into a pandas DataFrame
-df = pd.read_csv(csv_file_path)
+df = pd.read_csv("co-emissions-per-capita.csv")
 
-# Display the DataFrame or perform operations as needed
+# Display the DataFrame
 print(df)
+
+# Define the functions
 
 def biggest_predictor(data):
     # Use relevant columns for analysis
     relevant_columns = ['gdp_per_capita', 'population', 'co2_per_capita', 'cars_per_capita', 'energy_production', 'diet_emissions']
 
     # Create a new DataFrame with relevant columns
-    df = data[relevant_columns].copy()
+    df_relevant = data[relevant_columns].copy()
 
     # Fill missing values with the mean
-    df = df.fillna(df.mean())
+    df_relevant = df_relevant.fillna(df_relevant.mean())
 
     # Use linear regression to find the biggest predictor
-    X = df.drop('co2_per_capita', axis=1)
-    y = df['co2_per_capita']
+    X = df_relevant.drop('co2_per_capita', axis=1)
+    y = df_relevant['co2_per_capita']
     model = LinearRegression()
     model.fit(X, y)
 
@@ -38,8 +36,8 @@ def biggest_predictor(data):
     plt.ylabel('Predictors')
     plt.show()
 
-# Call the functio
-biggest_predictor(data)
+# Call the function
+biggest_predictor(df)
 
 def biggest_strides(data):
     # Calculate relative CO2 output
@@ -57,28 +55,28 @@ def biggest_strides(data):
     plt.show()
 
 # Call the function
-biggest_strides(data)
+biggest_strides(df)
 
 def future_price_prediction(data):
     # Use relevant columns for analysis
     relevant_columns = ['solar_price', 'wind_price', 'hydro_price', 'bioenergy_price']
 
     # Create a new DataFrame with relevant columns
-    df = data[relevant_columns].copy()
+    df_relevant = data[relevant_columns].copy()
 
     # Drop rows with missing values
-    df = df.dropna()
+    df_relevant = df_relevant.dropna()
 
     # Use linear regression to predict future prices
-    X = df.drop(['solar_price', 'wind_price'], axis=1)
+    X = df_relevant.drop(['solar_price', 'wind_price'], axis=1)
     for fuel in ['solar', 'wind']:
-        y = df[f'{fuel}_price']
+        y = df_relevant[f'{fuel}_price']
         model = LinearRegression()
         model.fit(X, y)
 
         # Plot the predicted prices
-        plt.scatter(df.index, y, label=f'Actual {fuel} Price')
-        plt.plot(df.index, model.predict(X), label=f'Predicted {fuel} Price', color='red')
+        plt.scatter(df_relevant.index, y, label=f'Actual {fuel} Price')
+        plt.plot(df_relevant.index, model.predict(X), label=f'Predicted {fuel} Price', color='red')
         plt.title(f'Future Price Prediction for {fuel} Energy')
         plt.xlabel('Observations')
         plt.ylabel('Price')
@@ -86,5 +84,4 @@ def future_price_prediction(data):
         plt.show()
 
 # Call the function
-future_price_prediction(data)
-
+future_price_prediction(df)
