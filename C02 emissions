@@ -4,7 +4,7 @@ from sklearn.linear_model import LinearRegression
 
 
 # Specify the path to your CSV file
-csv_file_path = 'C:\CO2 emissions'
+csv_file_path = 'C:\CO2 emissions\owid-energy-data'
 
 # Read the CSV file into a pandas DataFrame
 df = pd.read_csv(csv_file_path)
